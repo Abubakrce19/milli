@@ -4,6 +4,7 @@ use std::path::Path;
 
 use roaring::RoaringBitmap;
 
+use crate::facet::FacetType;
 use crate::heed_codec::facet::new::{FacetGroupValue, FacetKey};
 use crate::{make_db_snap_from_iter, ExternalDocumentsIds, Index};
 
@@ -361,7 +362,7 @@ pub fn snap_number_faceted_documents_ids(index: &Index) -> String {
     let mut snap = String::new();
     for field_id in fields_ids_map.ids() {
         let number_faceted_documents_ids =
-            index.number_faceted_documents_ids(&rtxn, field_id).unwrap();
+            index.faceted_documents_ids(&rtxn, field_id, FacetType::Number).unwrap();
         writeln!(&mut snap, "{field_id:<3} {}", display_bitmap(&number_faceted_documents_ids))
             .unwrap();
     }
@@ -374,7 +375,7 @@ pub fn snap_string_faceted_documents_ids(index: &Index) -> String {
     let mut snap = String::new();
     for field_id in fields_ids_map.ids() {
         let string_faceted_documents_ids =
-            index.string_faceted_documents_ids(&rtxn, field_id).unwrap();
+            index.faceted_documents_ids(&rtxn, field_id, FacetType::String).unwrap();
         writeln!(&mut snap, "{field_id:<3} {}", display_bitmap(&string_faceted_documents_ids))
             .unwrap();
     }
