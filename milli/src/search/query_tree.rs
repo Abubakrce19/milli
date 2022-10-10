@@ -188,8 +188,8 @@ impl<'a> Context for QueryTreeBuilder<'a> {
     }
 
     fn min_word_len_for_typo(&self) -> heed::Result<(u8, u8)> {
-        let one = self.index.min_word_len_one_typo(&self.rtxn)?;
-        let two = self.index.min_word_len_two_typos(&self.rtxn)?;
+        let one = self.index.min_word_len_one_typo(self.rtxn)?;
+        let two = self.index.min_word_len_two_typos(self.rtxn)?;
         Ok((one, two))
     }
 
@@ -556,7 +556,7 @@ fn create_matching_words(
                     for synonym in synonyms {
                         let synonym = synonym
                             .into_iter()
-                            .map(|syn| MatchingWord::new(syn.to_string(), 0, false))
+                            .map(|syn| MatchingWord::new(syn, 0, false))
                             .collect();
                         matching_words.push((synonym, vec![id]));
                     }
@@ -584,7 +584,7 @@ fn create_matching_words(
                 let ids: Vec<_> =
                     (0..words.len()).into_iter().map(|i| id + i as PrimitiveWordId).collect();
                 let words =
-                    words.into_iter().map(|w| MatchingWord::new(w.to_string(), 0, false)).collect();
+                    words.into_iter().map(|w| MatchingWord::new(w, 0, false)).collect();
                 matching_words.push((words, ids));
             }
         }
@@ -639,7 +639,7 @@ fn create_matching_words(
                                 for synonym in synonyms {
                                     let synonym = synonym
                                         .into_iter()
-                                        .map(|syn| MatchingWord::new(syn.to_string(), 0, false))
+                                        .map(|syn| MatchingWord::new(syn, 0, false))
                                         .collect();
                                     matching_words.push((synonym, ids.clone()));
                                 }
