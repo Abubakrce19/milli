@@ -65,8 +65,6 @@ jobs:
         uses: actions-rs/cargo@v1
         with:
           command: clippy
-          # TODO: fix clippy warnings in tests
-          # args: --all-targets
 
   fmt:
     name: Run Rustfmt
