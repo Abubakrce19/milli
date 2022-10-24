@@ -468,6 +468,7 @@ can be inserted into the database in sorted order. When it is flushed, it calls 
 #[derive(Default)]
 struct PrefixAndProximityBatch {
     word1: Vec<u8>,
+    #[allow(clippy::type_complexity)]
     batch: Vec<(Vec<u8>, Vec<Cow<'static, [u8]>>)>,
 }
 

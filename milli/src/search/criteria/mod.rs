@@ -89,6 +89,7 @@ pub trait Context<'c> {
         &self,
         docid: DocumentId,
     ) -> heed::Result<HashMap<String, RoaringBitmap>>;
+    #[allow(clippy::type_complexity)]
     fn word_position_iterator(
         &self,
         word: &str,

@@ -262,8 +262,9 @@ impl<'t, 'u, 'i> Facets<'t, 'u, 'i> {
 /// 1. a vector of grenad::Reader. The reader at index `i` corresponds to the elements of level `i + 1`
 /// that must be inserted into the database.
 /// 2. a roaring bitmap of all the document ids present in the database
-fn compute_facet_number_levels<'t>(
-    rtxn: &'t heed::RoTxn,
+#[allow(clippy::too_many_arguments)]
+fn compute_facet_number_levels(
+    rtxn: &heed::RoTxn,
     db: heed::Database<FacetLevelValueF64Codec, CboRoaringBitmapCodec>,
     compression_type: CompressionType,
     compression_level: Option<u32>,

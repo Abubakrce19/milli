@@ -54,6 +54,7 @@ pub(crate) fn data_from_obkv_documents(
         })
         .collect::<Result<()>>()?;
 
+    #[allow(clippy::type_complexity)]
     let result: Result<(Vec<_>, (Vec<_>, (Vec<_>, Vec<_>)))> = flattened_obkv_chunks
         .par_bridge()
         .map(|flattened_obkv_chunks| {
@@ -219,6 +220,7 @@ fn send_original_documents_data(
 /// - docid_fid_facet_strings
 /// - docid_fid_facet_exists
 #[allow(clippy::too_many_arguments)]
+#[allow(clippy::type_complexity)]
 fn send_and_extract_flattened_documents_data(
     flattened_documents_chunk: Result<grenad::Reader<File>>,
     indexer: GrenadParameters,
