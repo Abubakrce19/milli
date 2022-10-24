@@ -332,8 +332,9 @@ fn compute_facet_number_levels<'t>(
 /// 1. a vector of grenad::Reader. The reader at index `i` corresponds to the elements of level `i + 1`
 /// that must be inserted into the database.
 /// 2. a roaring bitmap of all the document ids present in the database
-fn compute_facet_strings_levels<'t>(
-    rtxn: &'t heed::RoTxn,
+#[allow(clippy::too_many_arguments)]
+fn compute_facet_strings_levels(
+    rtxn: &heed::RoTxn,
     db: heed::Database<FacetStringLevelZeroCodec, FacetStringLevelZeroValueCodec>,
     compression_type: CompressionType,
     compression_level: Option<u32>,
@@ -436,6 +437,7 @@ from the level below were read/created. Its arguments are:
 A vector of grenad::Reader. The reader at index `i` corresponds to the elements of level `i + 1`
 that must be inserted into the database.
 */
+#[allow(clippy::too_many_arguments)]
 fn recursive_compute_levels<'t, KeyCodec, ValueCodec, Bound>(
     rtxn: &'t heed::RoTxn,
     db: heed::Database<KeyCodec, ValueCodec>,
