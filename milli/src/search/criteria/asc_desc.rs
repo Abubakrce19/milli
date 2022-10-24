@@ -115,7 +115,7 @@ impl<'t> Criterion for AscDesc<'t> {
                         let mut candidates = match (&self.query_tree, candidates) {
                             (_, Some(candidates)) => candidates,
                             (Some(qt), None) => {
-                                let context = CriteriaBuilder::new(&self.rtxn, &self.index)?;
+                                let context = CriteriaBuilder::new(self.rtxn, self.index)?;
                                 resolve_query_tree(&context, qt, params.wdcache)?
                             }
                             (None, None) => self.index.documents_ids(self.rtxn)?,
@@ -237,6 +237,7 @@ fn iterative_facet_number_ordered_iter<'t>(
     // The itertools GroupBy iterator doesn't provide an owned version, we are therefore
     // required to collect the result into an owned collection (a Vec).
     // https://github.com/rust-itertools/itertools/issues/499
+    #[allow(clippy::needless_collect)]
     let vec: Vec<_> = iter
         .group_by(|(_, v)| *v)
         .into_iter()
@@ -279,6 +280,7 @@ fn iterative_facet_string_ordered_iter<'t>(
     // The itertools GroupBy iterator doesn't provide an owned version, we are therefore
     // required to collect the result into an owned collection (a Vec).
     // https://github.com/rust-itertools/itertools/issues/499
+    #[allow(clippy::needless_collect)]
     let vec: Vec<_> = iter
         .group_by(|(_, v)| *v)
         .into_iter()

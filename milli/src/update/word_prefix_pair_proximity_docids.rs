@@ -468,6 +468,7 @@ can be inserted into the database in sorted order. When it is flushed, it calls 
 #[derive(Default)]
 struct PrefixAndProximityBatch {
     word1: Vec<u8>,
+    #[allow(clippy::type_complexity)]
     batch: Vec<(Vec<u8>, Vec<Cow<'static, [u8]>>)>,
 }
 
@@ -793,7 +794,7 @@ mod tests {
         expected_prefixes: &[&str],
     ) {
         let mut actual_prefixes = vec![];
-        trie.for_each_prefix_of(word.as_bytes(), &mut Vec::new(), &search_start, |x| {
+        trie.for_each_prefix_of(word.as_bytes(), &mut Vec::new(), search_start, |x| {
             let s = String::from_utf8(x.to_owned()).unwrap();
             actual_prefixes.push(s);
         });

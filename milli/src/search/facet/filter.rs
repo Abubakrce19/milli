@@ -96,19 +96,19 @@ impl<'a> Filter<'a> {
                 Either::Left(array) => {
                     let mut ors = vec![];
                     for rule in array {
-                        if let Some(filter) = Self::from_str(rule.as_ref())? {
+                        if let Some(filter) = Self::from_str(rule)? {
                             ors.push(filter.condition);
                         }
                     }
 
-                    if ors.len() > 1 {
-                        ands.push(FilterCondition::Or(ors));
-                    } else if ors.len() == 1 {
-                        ands.push(ors.pop().unwrap());
+                    match ors.len() {
+                        1 => ands.push(ors.pop().unwrap()),
+                        n if n > 1 => ands.push(FilterCondition::Or(ors)),
+                        _ => (),
                     }
                 }
                 Either::Right(rule) => {
-                    if let Some(filter) = Self::from_str(rule.as_ref())? {
+                    if let Some(filter) = Self::from_str(rule)? {
                         ands.push(filter.condition);
                     }
                 }
@@ -129,6 +129,7 @@ impl<'a> Filter<'a> {
         Ok(Some(Self { condition: and }))
     }
 
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str(expression: &'a str) -> Result<Option<Self>> {
         let condition = match FilterCondition::parse(expression) {
             Ok(Some(fc)) => Ok(fc),
@@ -358,7 +359,7 @@ impl<'a> Filter<'a> {
                     index,
                     filterable_fields,
                 )?;
-                return Ok(all_ids - selected);
+                Ok(all_ids - selected)
             }
             FilterCondition::In { fid, els } => {
                 if crate::is_faceted(fid.value(), filterable_fields) {
@@ -387,9 +388,9 @@ impl<'a> Filter<'a> {
                 if crate::is_faceted(fid.value(), filterable_fields) {
                     let field_ids_map = index.fields_ids_map(rtxn)?;
                     if let Some(fid) = field_ids_map.id(fid.value()) {
-                        Self::evaluate_operator(rtxn, index, fid, &op)
+                        Self::evaluate_operator(rtxn, index, fid, op)
                     } else {
-                        return Ok(RoaringBitmap::new());
+                        Ok(RoaringBitmap::new())
                     }
                 } else {
                     match fid.lexeme() {
