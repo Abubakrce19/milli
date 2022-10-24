@@ -129,6 +129,7 @@ impl<'a> Filter<'a> {
         Ok(Some(Self { condition: and }))
     }
 
+    #[allow(clippy::should_implement_trait)]
     pub fn from_str(expression: &'a str) -> Result<Option<Self>> {
         let condition = match FilterCondition::parse(expression) {
             Ok(Some(fc)) => Ok(fc),
