@@ -207,7 +207,7 @@ impl<'a> Context for QueryTreeBuilder<'a> {
         self.index
             .word_pair_proximity_docids
             .remap_data_type::<CboRoaringBitmapLenCodec>()
-            .get(&self.rtxn, &key)
+            .get(self.rtxn, &key)
     }
 }
 

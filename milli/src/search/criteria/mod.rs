@@ -246,7 +246,7 @@ impl<'t> CriteriaBuilder<'t> {
             exhaustive_number_hits,
             distinct,
         )) as Box<dyn Criterion>;
-        for name in self.index.criteria(&self.rtxn)? {
+        for name in self.index.criteria(self.rtxn)? {
             criterion = match name {
                 Name::Words => Box::new(Words::new(self, criterion)),
                 Name::Typo => Box::new(Typo::new(self, criterion)),
