@@ -101,10 +101,10 @@ impl<'a> Filter<'a> {
                         }
                     }
 
-                    if ors.len() > 1 {
-                        ands.push(FilterCondition::Or(ors));
-                    } else if ors.len() == 1 {
-                        ands.push(ors.pop().unwrap());
+                    match ors.len() {
+                        1 => ands.push(ors.pop().unwrap()),
+                        n if n > 1 => ands.push(FilterCondition::Or(ors)),
+                        _ => (),
                     }
                 }
                 Either::Right(rule) => {
